@@ -12,7 +12,7 @@ class User extends Component {
   };
 
   render() {
-    const { id, firstName,lastName, email} = this.props.user;
+    const { id, firstName,lastName,email} = this.props.user;
     return (
       <tr>
         <td style={{ textAlign: "center" }}>{id}</td>

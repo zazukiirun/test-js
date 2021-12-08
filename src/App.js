@@ -6,7 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import UserList from './components/UserList';
 import MyForm from './components/MyForm';
 import axios from 'axios';
-import Loader from './components/Loader';
+import Loader from './Loader';
 
 
 class App extends Component { 
@@ -40,9 +40,11 @@ class App extends Component {
 
     await axios
       .post(this.state.url, {
-        firstnNme: data.firstName,
+        firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email
+        email: data.email,
+        position: {id:data.position.id},
+        role:{id:data.role.id}
       })
       .catch(e => {
         // console.log(e.message)
@@ -60,9 +62,12 @@ class App extends Component {
 
     await axios
       .put(`${this.state.url}/${data.id}`, {
+        id: data.id,
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email
+        email: data.email,
+        role: {id:data.role.id},
+        position: data.position,
       })
       .catch(e => {
         console.log(e.message);
@@ -92,12 +97,12 @@ class App extends Component {
   };
 
   onEdit = data => {
-    // console.log("app ", data);
+    console.log("app", data);
     this.setState({ user: data });
   };
 
   onFormSubmit = data => {
-    // console.log("app ", data);
+    console.log("app ", data);
     // return;
     // console.log("app ", data);
     if (data.isEdit) {
@@ -117,10 +122,10 @@ class App extends Component {
             <div className="table-title">
               <div className="row">
                 <div className="col-sm-6">
-                  <h2>Manage <b>Employees</b></h2>
+                  <h2>Manage <b>User</b></h2>
                 </div>
                 <div className="col-sm-6"> 
-                  <button  className="btn btn-sm btn-success" data-toggle="modal"> <span>Add New Employee</span></button>
+                  <button  className="btn btn-sm btn-success" data-toggle="modal"> <span>Add New User</span></button>
                   <button  className="btn btn-sm btn-danger" data-toggle="modal"><i className="bi-alarm"></i> <span>Delete</span></button>
                 </div>
               </div>

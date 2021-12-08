@@ -2,35 +2,43 @@ import React, { Component } from "react";
 import axios from 'axios';
 class MyForm extends Component {
   state = {
-    form: { firstname: "", lastname: "", email: "",position:"",role: {id= 1}, isEdit: false },
+    form: { firstName: "", lastName: "", email: "", role: { id: 1, name: '' },position:{id:1},isEdit: false },
     btnName: "Save",
     btnClass: "ui primary button submit-button",
-    position:[],
-    positionUrl ='',
-    role:[],
-    roleUrl = ''
+    positions: [],
+    positionUrl: '/api/position',
+    roles: [],
+    roleUrl: '/api/role'
   };
 
   isEmptyObj(obj) {
     return Object.entries(obj).length === 0 && obj.constructor === Object;
   }
 
-  componentDidMount(){
-    axios.get(this.state.url)
-    .then( response => {
-      this.setState( {users: response.data ,
-                      loader: false});
-    })
-    .catch( error => {
-      console.log(error);
-    });
+  componentDidMount() {
+    console.log('componentDidMount in MyForm')
+    axios.get(this.state.positionUrl)
+      .then(response => {
+        this.setState({
+          positions: response.data,
+          loader: false
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    axios.get(this.state.roleUrl)
+      .then(response => {
+        this.setState({
+          roles: response.data,
+          loader: false
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
   }
-
-
-
-
-
   componentDidUpdate(prevProps) {
     if (prevProps !== this.props && !this.isEmptyObj(this.props.user)) {
       this.setState({
@@ -44,6 +52,7 @@ class MyForm extends Component {
 
   onFormSubmit = event => {
     // prevent form submit
+    console.log('MyForm onFormSubmit');
     event.preventDefault();
 
     // form validation
@@ -65,26 +74,23 @@ class MyForm extends Component {
   handleChange = event => {
     const { name, value } = event.target;
     let form = this.state.form;
-    if(event.target.type='text'){
+    if (event.target.type === 'text') {
       form[name] = value;
-    }else{
+    } else {
       form[name].id = value;
     }
-
-
-    form[name] = value;
     this.setState({ form });
   };
 
   formValidation = () => {
     // first name
-    if (document.getElementsByName("firstname")[0].value === "") {
+    if (document.getElementsByName("firstName")[0].value === "") {
       alert("Enter first name");
       return false;
     }
 
     // last name
-    if (document.getElementsByName("lastname")[0].value === "") {
+    if (document.getElementsByName("lastName")[0].value === "") {
       alert("Enter last name");
       return false;
     }
@@ -93,24 +99,16 @@ class MyForm extends Component {
     if (document.getElementsByName("email")[0].value === "") {
       alert("Enter email");
       return false;
+      
     }
-    // if (document.getElementsByName("position")[0].value === "") {
-    //   alert("Enter position");
-    //   return false;
-    // }
-
-    // if (document.getElementsByName("role")[0].value === "") {
-    //   alert("Enter role");
-    //   return false;
-    // }
-    return true;
+      return true;
   };
 
   clearFormFields = () => {
     // console.log("clear");
     // change form state
     this.setState({
-      form: { firstname: "", lastname: "", email: "", position:"", role:"", isEdit: false }
+      form: { firstName: "", lastName: "", email: "", role: { id: 1 }, position:{id:1}, isEdit: false }
     });
 
     // clear form fields
@@ -122,101 +120,71 @@ class MyForm extends Component {
       <form className="ui form">
         <div className="fields">
           <div className="four wide field">
-            <label>First name</label>
+            <label>First Name</label>
             <input
               type="text"
-              name="firstname"
+              name="firstName"
               placeholder="First Name"
               onChange={this.handleChange}
-              value={this.state.form.firstname}
+              value={this.state.form.firstName}
             />
           </div>
 
           <div className="four wide field">
-            <label>Last name</label>
+            <label>Last Name</label>
             <input
               type="text"
-              name="lastname"
+              name="lastName"
               placeholder="Last Name"
               onChange={this.handleChange}
-              value={this.state.form.lastname}
+              value={this.state.form.lastName}
             />
           </div>
 
           <div className="six wide field">
             <label>E-mail</label>
             <input
-              type="email"
+              type="text"
               name="email"
               placeholder="joe@schmoe.com"
               onChange={this.handleChange}
               value={this.state.form.email}
             />
           </div>
-
-          {/* <div className="seven wide field">
-            <label>Position</label>
-            <input
-              type="tye"
-              name="position"
-              placeholder="number key"
-              onChange={this.handleChange}
-              value={this.state.form.position}
-            />
-          </div> */}
-
-           {/* <div className="eight wide field">
-            <label>role</label>
-            <input
-              type="text"
-              name="role"
-              placeholder="number key"
-              onChange={this.handleChange}
-              value={this.state.form.role}
-            />
-          </div> */}
-
-          <div className="seven wide field">
-          <label for="positon" type="position">
-            Position:
-          </label>
-          <select id="position" name="position" 
-              onChange={this.handleChange}>
-          <option value="null" className ="posotion">--Select position name--</option>
-            <option value="developer">Developer</option>
-            <option value="tester">Tester</option>
-            <option value="project manager">Project Manager</option>
-
-            <optgroup label="etc.">
-            <option value="...">Database Management</option>
-            <option value="...">IT Management</option>
-          </optgroup>
-          </select>
-          </div>
-
-          <div className="eight wide field">
-          <label for="role" type="role">
-            Role:
-          </label>
-          <select id="role" name="role" onChange={this.handleChange}>
-          <option value={this.state.form.role.id} className ="role">--Select role name--</option>
-            <option value="1">Admin</option>
-            <option value="2">User</option>
           
-          <optgroup label="etc.">
-            <option value="3">...</option>
-            <option value="4">...</option>
-          </optgroup>
+          <div className="four wide field">
+          <label for="position">position:</label>
+          <select id="position.id" name="position" value={this.state.form.position.id} onChange={this.handleChange}>
+            {this.state.positions.map((position) => (
+              <option key={position.id} value={position.id}>
+                {''}
+                {position.name}
+              </option>
+            ))}
           </select>
-          </div>
-
-
-          <div className="two wide field">
-            <button className={this.state.btnClass} onClick={this.onFormSubmit}>
-              {this.state.btnName}
-            </button>
-          </div>
+       
         </div>
+
+          <div className="four wide field">
+          <label for="role">Role:</label>
+          <select id="role.id" name="role" value={this.state.form.role.id} onChange={this.handleChange}>
+            {this.state.roles.map((role) => (
+              <option key={role.id} value={role.id}>
+                {''}
+                {role.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        </div>        
+
+        <div className="two wide field">
+          <button className={this.state.btnClass} onClick={this.onFormSubmit}>
+            {this.state.btnName}
+          </button>
+        </div>
+
       </form>
     );
   }

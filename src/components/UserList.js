@@ -19,7 +19,7 @@ class UserList extends Component {
         <table className="table table-striped table-hover">
           <thead>
             <tr>
-              <th style={{ width: "50px", textAlign: "center" }}>#</th>
+              <th style={{ width: "50px", textAlign: "center" }}>ID</th>
               <th>Name</th>
               <th>E-mail</th>
               <th style={{ width: "250px" }}>Action</th>
